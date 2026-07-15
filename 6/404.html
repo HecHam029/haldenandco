@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 · Halden &amp; Co.</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=IBM+Plex+Mono&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<style>
+  :root{--void:#000;--frost:#f2efe8;--ash:#d4d0c6;--slate:#a6a39b;--gold:#c8a45a;--gold2:#e7ce8c;--hair:#1d1d22;--hair2:#2a2a31;--mono:'IBM Plex Mono',monospace}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',sans-serif;background:var(--void);color:var(--frost);min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .wrap{text-align:center;padding:32px;position:relative;z-index:1}
+  .code{font-size:clamp(88px,20vw,180px);font-weight:400;letter-spacing:-.02em;line-height:1;color:var(--frost)}
+  .code i{font-family:'Instrument Serif',serif;font-style:italic;color:var(--gold2)}
+  .lbl{font-family:var(--mono);font-size:14px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:26px}
+  .msg{font-size:17px;color:var(--slate);max-width:44ch;margin:22px auto 38px}
+  .btn{display:inline-block;font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;padding:16px 34px;background:linear-gradient(135deg,var(--gold2),#9a7a33);color:#1b1407;text-decoration:none;font-weight:700}
+  .btn:hover{filter:brightness(1.08)}
+  canvas{position:fixed;inset:0;z-index:0}
+</style>
+</head>
+<body>
+<canvas id="dust"></canvas>
+<div class="wrap">
+  <div class="lbl">HALDEN &amp; CO.</div>
+  <div class="code" id="code">4<i>0</i>4</div>
+  <p class="msg" id="msg">This page slipped through the framework. The rest of the practice is exactly where you left it.</p>
+  <a class="btn" href="/">Return to the firm</a>
+</div>
+<script>
+  // faint drifting dust, matching the site's ambient field
+  try{
+    var cv=document.getElementById('dust'),ctx=cv.getContext('2d');
+    var W,H,P=[];function size(){W=cv.width=innerWidth;H=cv.height=innerHeight;}
+    size();addEventListener('resize',size);
+    for(var i=0;i<70;i++)P.push({x:Math.random()*W,y:Math.random()*H,v:.08+Math.random()*.2,s:1+Math.random()*2,p:Math.random()*6.28});
+    (function d(){ctx.clearRect(0,0,W,H);
+      for(var i=0;i<P.length;i++){var q=P[i];q.y-=q.v;if(q.y<-4)q.y=H+4;
+        ctx.globalAlpha=.12+.08*Math.sin(q.p+Date.now()*.001);
+        ctx.fillStyle=Math.random()<.06?'#c8a45a':'#d4d0c6';
+        ctx.fillRect(q.x,q.y,q.s*2.2,1.1);}
+      ctx.globalAlpha=1;requestAnimationFrame(d);})();
+  }catch(e){}
+  // scramble-in the message once
+  try{
+    var el=document.getElementById('msg'),final=el.textContent,g='abcdefghijklmnopqrstuvwxyz#%&<>*';
+    if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+      var f=0,T=40;
+      (function t(){f++;var rev=Math.floor(f/T*final.length),out='';
+        for(var i=0;i<final.length;i++)out+=(i<rev||final[i]===' ')?final[i]:g[Math.floor(Math.random()*g.length)];
+        el.textContent=out;if(f<T)setTimeout(t,22);else el.textContent=final;})();
+    }
+  }catch(e){}
+</script>
+</body>
+</html>
